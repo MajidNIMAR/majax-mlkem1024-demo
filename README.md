@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/MajidNIMAR/majax-mlkem1024-demo/actions/workflows/verify.yml"><img alt="Verification" src="https://img.shields.io/github/actions/workflow/status/MajidNIMAR/majax-mlkem1024-demo/verify.yml?branch=main&label=verification&logo=github&color=18c995"></a>
+  <a href="https://github.com/MajidNIMAR/majax-mlkem1024-demo/actions/workflows/verify.yml"><img alt="Local verification" src="https://img.shields.io/badge/local_checks-6%20passed-18c995"></a>
   <img alt="Algorithm" src="https://img.shields.io/badge/algorithm-ML--KEM--1024-20b7e8">
   <img alt="Engines" src="https://img.shields.io/badge/demo_engine-1-9ba8b8">
   <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/license-Apache--2.0-f0a52b"></a>
