@@ -17,6 +17,35 @@
 
 ---
 
+## The development branch
+
+The default `main` branch preserves the stable, single-engine ML-KEM-1024
+demonstrator. The active engineering work is published separately on
+[`development`](https://github.com/MajidNIMAR/majax-mlkem1024-demo/tree/development)
+so the original experiment remains reproducible while the public library grows.
+
+<p align="center">
+  <strong><a href="https://github.com/MajidNIMAR/majax-mlkem1024-demo/tree/development">Explore the development branch</a></strong>
+</p>
+
+The development line currently provides the following material.
+
+1. A typed Rust API for KeyGen, Encaps and Decaps
+2. One interface for ML-KEM-512, ML-KEM-768 and ML-KEM-1024
+3. Deterministic NIST ACVP samples, external rejection vectors and negative tests
+4. Fuzzing, Valgrind memory checks and DudeCT timing analysis
+5. Portable, AVX2 and AArch64/NEON backends with public benchmarks
+6. Reproducible x86-64 and AArch64 releases with SBOMs, Sigstore signatures and provenance
+7. A standalone downstream consumer, generated API documentation and an evidence-based adoption register
+8. Public governance, contribution, maintenance, disclosure and release processes
+
+Every stage has its own engineering note under
+[`docs/development`](https://github.com/MajidNIMAR/majax-mlkem1024-demo/tree/development/docs/development).
+All five continuous-integration jobs exercise verification, assurance,
+integration and both supported processor architectures. This expanded branch
+remains public development work. It is not presented as the private Majax
+production implementation or as an independent security audit.
+
 ## Why this repository exists
 
 Majax Messenger uses five specialized ML-KEM-1024 domains inside a broader
