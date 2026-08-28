@@ -6,6 +6,21 @@ The stable demonstrator history remains available on the `main` branch.
 
 ## Unreleased
 
+### Step 3, deterministic conformance and negative tests
+
+- added feature-gated deterministic KeyGen and Encaps interfaces for testing
+- matched pinned NIST ACVP key-generation vectors for all three parameter sets
+- matched pinned NIST ACVP encapsulation vectors for all three parameter sets
+- added pinned C2SP CCTV implicit-rejection vectors for all three parameter sets
+- verified external expected rejection secrets byte for byte
+- added short and extended length tests for every encoded object
+- added cross-parameter public key, private key and ciphertext rejection tests
+- checked altered ciphertexts at multiple positions for deterministic rejection
+- documented the evidence boundary without claiming an ACVP validation
+
+The complete engineering note is available in
+[`docs/development/step-03-conformance-and-negative-tests.md`](docs/development/step-03-conformance-and-negative-tests.md).
+
 ### Step 2, unified ML-KEM parameter sets
 
 - added ML-KEM-512 and ML-KEM-768 beside the existing ML-KEM-1024 path

@@ -21,12 +21,16 @@ public operations.
 - legacy operations continue to select ML-KEM-1024
 - secret byte containers are wiped when dropped
 - malformed objects, altered ciphertexts and cross-level keys are tested
+- pinned external rejection vectors cover all three parameter sets
+- deterministic KeyGen and Encaps test interfaces are feature gated
+- pinned NIST ACVP sample outputs are compared byte for byte
+- boundary-length and cross-parameter negative matrices run in CI
 
 ## Ordered priorities
 
 1. Extract and stabilize the typed ML-KEM-1024 library API, completed
 2. Add all three parameter sets through one interface, completed
-3. Expand deterministic, negative and conformance testing
+3. Expand deterministic, negative and conformance testing, completed
 4. Add fuzzing, constant-time analysis and higher-assurance evidence
 5. Introduce portable and architecture-specific performance backends
 6. Strengthen reproducible releases, SBOMs and provenance

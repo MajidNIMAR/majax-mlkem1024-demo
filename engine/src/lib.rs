@@ -93,6 +93,7 @@ pub enum Error {
     InvalidPublicKey,
     InvalidSecretKey,
     InvalidCiphertext,
+    BackendFailure,
 }
 
 impl fmt::Display for Error {
@@ -101,6 +102,7 @@ impl fmt::Display for Error {
             Self::InvalidPublicKey => "invalid public key for the selected ML-KEM level",
             Self::InvalidSecretKey => "invalid private key for the selected ML-KEM level",
             Self::InvalidCiphertext => "invalid ciphertext for the selected ML-KEM level",
+            Self::BackendFailure => "the ML-KEM backend rejected the operation",
         };
         formatter.write_str(message)
     }
@@ -145,6 +147,128 @@ pub struct Encapsulation {
     pub algorithm: Algorithm,
     pub ciphertext: Vec<u8>,
     pub shared_secret: SecretBytes,
+}
+
+#[cfg(feature = "deterministic-testing")]
+mod deterministic {
+    use super::{Algorithm, Encapsulation, Error, KeyPair, SecretBytes};
+    use std::ffi::c_int;
+
+    macro_rules! declare_derandomized_backend {
+        ($library:literal, $keypair:ident, $encapsulate:ident) => {
+            #[link(name = $library)]
+            unsafe extern "C" {
+                fn $keypair(public_key: *mut u8, secret_key: *mut u8, coins: *const u8) -> c_int;
+                fn $encapsulate(
+                    ciphertext: *mut u8,
+                    shared_secret: *mut u8,
+                    public_key: *const u8,
+                    coins: *const u8,
+                ) -> c_int;
+            }
+        };
+    }
+
+    declare_derandomized_backend!(
+        "ml-kem-512_clean",
+        PQCLEAN_MLKEM512_CLEAN_crypto_kem_keypair_derand,
+        PQCLEAN_MLKEM512_CLEAN_crypto_kem_enc_derand
+    );
+    declare_derandomized_backend!(
+        "ml-kem-768_clean",
+        PQCLEAN_MLKEM768_CLEAN_crypto_kem_keypair_derand,
+        PQCLEAN_MLKEM768_CLEAN_crypto_kem_enc_derand
+    );
+    declare_derandomized_backend!(
+        "ml-kem-1024_clean",
+        PQCLEAN_MLKEM1024_CLEAN_crypto_kem_keypair_derand,
+        PQCLEAN_MLKEM1024_CLEAN_crypto_kem_enc_derand
+    );
+
+    type KeypairFunction = unsafe extern "C" fn(*mut u8, *mut u8, *const u8) -> c_int;
+    type EncapsulationFunction =
+        unsafe extern "C" fn(*mut u8, *mut u8, *const u8, *const u8) -> c_int;
+
+    fn keypair_function(algorithm: Algorithm) -> KeypairFunction {
+        match algorithm {
+            Algorithm::MlKem512 => PQCLEAN_MLKEM512_CLEAN_crypto_kem_keypair_derand,
+            Algorithm::MlKem768 => PQCLEAN_MLKEM768_CLEAN_crypto_kem_keypair_derand,
+            Algorithm::MlKem1024 => PQCLEAN_MLKEM1024_CLEAN_crypto_kem_keypair_derand,
+        }
+    }
+
+    fn encapsulation_function(algorithm: Algorithm) -> EncapsulationFunction {
+        match algorithm {
+            Algorithm::MlKem512 => PQCLEAN_MLKEM512_CLEAN_crypto_kem_enc_derand,
+            Algorithm::MlKem768 => PQCLEAN_MLKEM768_CLEAN_crypto_kem_enc_derand,
+            Algorithm::MlKem1024 => PQCLEAN_MLKEM1024_CLEAN_crypto_kem_enc_derand,
+        }
+    }
+
+    pub(super) fn generate(
+        algorithm: Algorithm,
+        d: &[u8; 32],
+        z: &[u8; 32],
+    ) -> Result<KeyPair, Error> {
+        let mut public_key = vec![0; algorithm.public_key_bytes()];
+        let mut secret_key = vec![0; algorithm.secret_key_bytes()];
+        let mut coins = [0; 64];
+        coins[..32].copy_from_slice(d);
+        coins[32..].copy_from_slice(z);
+
+        // The output buffers and fixed-size seed remain valid for the full FFI call.
+        let status = unsafe {
+            keypair_function(algorithm)(
+                public_key.as_mut_ptr(),
+                secret_key.as_mut_ptr(),
+                coins.as_ptr(),
+            )
+        };
+        coins.fill(0);
+        if status != 0 {
+            secret_key.fill(0);
+            return Err(Error::BackendFailure);
+        }
+
+        let secret_key = SecretBytes(secret_key);
+        Ok(KeyPair {
+            algorithm,
+            public_key,
+            secret_key,
+        })
+    }
+
+    pub(super) fn encapsulate(
+        algorithm: Algorithm,
+        public_key: &[u8],
+        m: &[u8; 32],
+    ) -> Result<Encapsulation, Error> {
+        if public_key.len() != algorithm.public_key_bytes() {
+            return Err(Error::InvalidPublicKey);
+        }
+
+        let mut ciphertext = vec![0; algorithm.ciphertext_bytes()];
+        let mut shared_secret = vec![0; algorithm.shared_secret_bytes()];
+        // The key, seed and output buffers remain valid for the full FFI call.
+        let status = unsafe {
+            encapsulation_function(algorithm)(
+                ciphertext.as_mut_ptr(),
+                shared_secret.as_mut_ptr(),
+                public_key.as_ptr(),
+                m.as_ptr(),
+            )
+        };
+        if status != 0 {
+            shared_secret.fill(0);
+            return Err(Error::BackendFailure);
+        }
+
+        Ok(Encapsulation {
+            algorithm,
+            ciphertext,
+            shared_secret: SecretBytes(shared_secret),
+        })
+    }
 }
 
 macro_rules! generate_with {
@@ -194,6 +318,19 @@ pub fn generate_keypair_for(algorithm: Algorithm) -> KeyPair {
     }
 }
 
+/// Generates an ML-KEM key pair from the FIPS 203 `d` and `z` inputs.
+///
+/// This deterministic entry point exists for conformance testing only. It is
+/// unavailable unless the `deterministic-testing` feature is enabled.
+#[cfg(feature = "deterministic-testing")]
+pub fn generate_keypair_deterministic(
+    algorithm: Algorithm,
+    d: &[u8; 32],
+    z: &[u8; 32],
+) -> Result<KeyPair, Error> {
+    deterministic::generate(algorithm, d, z)
+}
+
 pub fn encapsulate(public_key: &[u8]) -> Result<Encapsulation, Error> {
     encapsulate_for(Algorithm::MlKem1024, public_key)
 }
@@ -204,6 +341,19 @@ pub fn encapsulate_for(algorithm: Algorithm, public_key: &[u8]) -> Result<Encaps
         Algorithm::MlKem768 => encapsulate_with!(mlkem768, algorithm, public_key),
         Algorithm::MlKem1024 => encapsulate_with!(mlkem1024, algorithm, public_key),
     }
+}
+
+/// Encapsulates from the FIPS 203 deterministic `m` input.
+///
+/// This deterministic entry point exists for conformance testing only. It is
+/// unavailable unless the `deterministic-testing` feature is enabled.
+#[cfg(feature = "deterministic-testing")]
+pub fn encapsulate_deterministic(
+    algorithm: Algorithm,
+    public_key: &[u8],
+    m: &[u8; 32],
+) -> Result<Encapsulation, Error> {
+    deterministic::encapsulate(algorithm, public_key, m)
 }
 
 pub fn decapsulate(ciphertext: &[u8], secret_key: &[u8]) -> Result<SecretBytes, Error> {

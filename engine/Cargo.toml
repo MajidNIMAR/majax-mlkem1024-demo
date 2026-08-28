@@ -7,6 +7,10 @@ license = "Apache-2.0"
 rust-version = "1.93"
 publish = false
 
+[features]
+default = []
+deterministic-testing = []
+
 [lib]
 name = "majax_mlkem"
 path = "src/lib.rs"

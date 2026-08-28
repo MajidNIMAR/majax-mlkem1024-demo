@@ -29,7 +29,7 @@ jobs:
             -v "$PWD/engine:/src" \
             -w /src \
             rust:1.93-bookworm@sha256:7c4ae649a84014c467d79319bbf17ce2632ae8b8be123ac2fb2ea5be46823f31 \
-            sh -c 'rustup component add rustfmt clippy >/dev/null && cargo fmt -- --check && cargo clippy --locked --all-targets -- -D warnings && cargo test --locked'
+            sh -c 'rustup component add rustfmt clippy >/dev/null && cargo fmt -- --check && cargo clippy --locked --all-features --all-targets -- -D warnings && cargo test --locked && cargo test --locked --features deterministic-testing'
 
       - name: Test source build
         run: sh scripts/test-all.sh
