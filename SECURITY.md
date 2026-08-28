@@ -11,16 +11,22 @@ Successful execution proves only the properties checked by the included test
 suite. It does not constitute an audit, certification or security assessment of
 Majax or of any system using this demonstrator.
 
-## Supported version
+## Supported versions
 
-Security corrections are applied to the latest revision of the default branch.
-Older revisions are retained for traceability but are not supported.
+Security corrections are applied to the latest stable release and the current
+`development` revision. Older revisions are retained for traceability but are
+not supported. The complete branch and release policy appears in
+`MAINTENANCE.md`.
 
 ## Reporting a vulnerability
 
 Please use the private security advisory feature of the GitHub repository. Do
 not disclose a suspected vulnerability in a public issue before a correction is
 available.
+
+The project does not promise a fixed response time. Private security reports
+receive priority over routine issues, and material corrections follow a
+coordinated disclosure process appropriate to their impact.
 
 Include the affected revision, the execution platform, the observed behaviour,
 the expected behaviour and the smallest reproducible test case. Do not include

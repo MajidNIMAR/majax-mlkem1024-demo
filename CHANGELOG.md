@@ -6,6 +6,16 @@ The stable demonstrator history remains available on the `main` branch.
 
 ## Unreleased
 
+### Step 8, maintenance and transparency
+
+- documented governance, contribution, support and maintenance policies
+- added public roadmap and reproducible release checklist
+- added structured defect, proposal and adoption-evidence forms
+- added code ownership, pull-request review criteria and dependency monitoring
+
+The complete engineering note is available in
+[`docs/development/step-08-maintenance-and-transparency.md`](docs/development/step-08-maintenance-and-transparency.md).
+
 ### Step 7, integration contract and adoption evidence
 
 - added a standalone Rust consumer for all three ML-KEM parameter sets

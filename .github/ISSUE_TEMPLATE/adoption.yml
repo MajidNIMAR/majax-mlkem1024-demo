@@ -1,0 +1,33 @@
+name: External adoption evidence
+description: Submit a verifiable third-party integration for review.
+title: "[Adoption] "
+labels:
+  - documentation
+body:
+  - type: input
+    id: project
+    attributes:
+      label: Project URL
+    validations:
+      required: true
+  - type: input
+    id: revision
+    attributes:
+      label: Immutable integration revision
+      description: Link to the exact commit that consumes the library.
+    validations:
+      required: true
+  - type: input
+    id: library
+    attributes:
+      label: Majax ML-KEM revision
+      description: Provide the exact consumed commit or release tag.
+    validations:
+      required: true
+  - type: textarea
+    id: use
+    attributes:
+      label: Integration description
+      description: Explain where and how the public API is used.
+    validations:
+      required: true

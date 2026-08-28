@@ -1,0 +1,34 @@
+name: Engineering proposal
+description: Propose a scoped API, assurance, performance or integration change.
+title: "[Proposal] "
+labels:
+  - enhancement
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: Explain the concrete limitation without prescribing a solution first.
+    validations:
+      required: true
+  - type: textarea
+    id: approach
+    attributes:
+      label: Proposed approach
+      description: Describe the public boundary, compatibility impact and alternatives.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Required evidence
+      description: List standards, vectors, negative tests, benchmarks or formal checks.
+    validations:
+      required: true
+  - type: textarea
+    id: maintenance
+    attributes:
+      label: Maintenance cost
+      description: Identify dependencies, platforms and continuing work introduced.
+    validations:
+      required: true

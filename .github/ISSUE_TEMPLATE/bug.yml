@@ -1,0 +1,49 @@
+name: Reproducible defect
+description: Report a public build, test, API or documentation failure.
+title: "[Defect] "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: Do not report vulnerabilities or include sensitive data here. Use a private security advisory instead.
+  - type: input
+    id: revision
+    attributes:
+      label: Exact revision
+      description: Provide the complete commit SHA or release tag.
+    validations:
+      required: true
+  - type: input
+    id: platform
+    attributes:
+      label: Platform
+      description: Include operating system, architecture and Docker version.
+    validations:
+      required: true
+  - type: textarea
+    id: command
+    attributes:
+      label: Reproduction
+      description: Provide the smallest command sequence that reproduces the failure.
+    validations:
+      required: true
+  - type: textarea
+    id: observed
+    attributes:
+      label: Observed result
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected result
+    validations:
+      required: true
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Data safety
+      options:
+        - label: I removed credentials, production data and secret material.
+          required: true

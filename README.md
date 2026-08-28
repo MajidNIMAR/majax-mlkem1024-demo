@@ -193,6 +193,17 @@ tests. It does not constitute an audit or certification of Majax Messenger.
 The complete boundary and private reporting process are documented in
 [`SECURITY.md`](SECURITY.md).
 
+## Maintenance and contributions
+
+Project decisions and cryptographic review requirements are documented in
+[`GOVERNANCE.md`](GOVERNANCE.md). Contribution checks, supported revisions and
+release discipline are covered by [`CONTRIBUTING.md`](CONTRIBUTING.md) and
+[`MAINTENANCE.md`](MAINTENANCE.md). Planned public work remains visible in
+[`ROADMAP.md`](ROADMAP.md).
+
+Public build and integration questions may use GitHub issues. Suspected
+vulnerabilities must follow the private process in `SECURITY.md`.
+
 ## Project identity
 
 This demonstrator is published by Majax to make a concrete part of its

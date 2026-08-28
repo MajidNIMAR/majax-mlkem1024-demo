@@ -1,0 +1,8 @@
+# Cryptographic and release surfaces require maintainer review.
+* @MajidNIMAR
+/engine/ @MajidNIMAR
+/assurance/ @MajidNIMAR
+/fuzz/ @MajidNIMAR
+/.github/workflows/ @MajidNIMAR
+/Dockerfile @MajidNIMAR
+/SECURITY.md @MajidNIMAR
