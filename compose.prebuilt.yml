@@ -1,0 +1,6 @@
+services:
+  kem-demo:
+    build:
+      context: .
+      dockerfile: Dockerfile.prebuilt
+    image: majax-kem-demo:prebuilt

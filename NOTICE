@@ -1,0 +1,8 @@
+Majax ML-KEM-1024 Demo
+Copyright 2026 Majax
+
+This product includes software developed by the RustPQ project and source
+derived from the PQClean project through the pqcrypto-mlkem crate.
+
+The corresponding dependency versions and declared licenses are listed in
+THIRD_PARTY_NOTICES.md.

@@ -1,0 +1,8 @@
+*.sh text eol=lf
+*.mjs text eol=lf
+*.rs text eol=lf
+*.toml text eol=lf
+Dockerfile* text eol=lf
+LICENSE* text eol=lf
+NOTICE text eol=lf
+bin/** binary

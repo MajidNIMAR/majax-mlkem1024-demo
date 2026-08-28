@@ -1,0 +1,22 @@
+[package]
+name = "mlkem-cli"
+version = "1.0.0"
+edition = "2021"
+description = "Single-engine ML-KEM-1024 JSON command-line demonstrator"
+license = "Apache-2.0"
+rust-version = "1.93"
+publish = false
+
+[dependencies]
+base64 = "=0.21.7"
+pqcrypto-mlkem = "=0.1.1"
+pqcrypto-traits = "=0.3.5"
+serde = { version = "=1.0.228", features = ["derive"] }
+serde_json = "=1.0.145"
+
+[profile.release]
+codegen-units = 1
+lto = "thin"
+opt-level = 3
+panic = "abort"
+strip = false

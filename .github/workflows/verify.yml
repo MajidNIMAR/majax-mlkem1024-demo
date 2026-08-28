@@ -1,0 +1,40 @@
+name: Verify demonstration
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Verify shell syntax
+        run: sh -n scripts/*.sh
+
+      - name: Verify included binary checksum
+        run: sha256sum --check CHECKSUMS.sha256
+
+      - name: Test source build
+        run: sh scripts/test-all.sh
+
+      - name: Test included x86-64 binary
+        run: sh scripts/test-prebuilt.sh
+
+      - name: Generate image identity and SPDX SBOM
+        run: sh scripts/generate-sbom.sh majax-kem-demo:1.0.0
+
+      - name: Upload verification artifacts
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: majax-kem-demo-verification
+          path: artifacts/
+          if-no-files-found: error

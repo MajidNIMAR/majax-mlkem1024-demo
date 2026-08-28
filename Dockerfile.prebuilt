@@ -1,0 +1,23 @@
+FROM node:20-bookworm-slim@sha256:2cf067cfed83d5ea958367df9f966191a942351a2df77d6f0193e162b5febfc0
+
+ENV NODE_ENV=production \
+    PORT=8080 \
+    MLKEM_CLI_PATH=/opt/majax-kem-demo/bin/mlkem-cli
+
+WORKDIR /opt/majax-kem-demo
+
+COPY --chown=node:node server.mjs ./server.mjs
+COPY --chown=node:node public ./public
+COPY --chown=node:node scripts/node ./scripts
+COPY --chown=node:node LICENSE NOTICE THIRD_PARTY_NOTICES.md ./
+COPY --chown=node:node bin/linux-x86_64/mlkem-cli ./bin/mlkem-cli
+
+RUN chmod 0555 ./bin/mlkem-cli \
+    && chmod 0444 ./server.mjs ./public/* ./scripts/* \
+    ./LICENSE ./NOTICE ./THIRD_PARTY_NOTICES.md
+
+USER node
+
+EXPOSE 8080
+
+CMD ["node", "server.mjs"]

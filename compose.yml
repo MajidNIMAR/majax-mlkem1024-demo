@@ -1,0 +1,29 @@
+services:
+  kem-demo:
+    build:
+      context: .
+    image: majax-kem-demo:1.0.0
+    container_name: majax-kem-demo
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:6062:8080"
+    environment:
+      PORT: "8080"
+      MLKEM_CLI_PATH: /opt/majax-kem-demo/bin/mlkem-cli
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,nodev,size=16m
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    pids_limit: 64
+    mem_limit: 256m
+    cpus: 1.0
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:8080/api/health').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
