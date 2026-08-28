@@ -31,6 +31,9 @@ public operations.
 - portable builds exclude architecture-specific code through a feature boundary
 - native builds dispatch to AVX2 or AArch64/NEON when the current CPU supports it
 - comparative KeyGen, Encaps and Decaps measurements run on x86-64 and AArch64
+- independent release builds must produce byte-for-byte identical binaries
+- source and image SBOMs are emitted in SPDX and CycloneDX formats
+- tagged artifacts receive keyless Sigstore signatures and GitHub provenance
 
 ## Ordered priorities
 
@@ -39,7 +42,7 @@ public operations.
 3. Expand deterministic, negative and conformance testing, completed
 4. Add fuzzing, constant-time analysis and higher-assurance evidence, completed
 5. Introduce portable and architecture-specific performance backends, completed
-6. Strengthen reproducible releases, SBOMs and provenance
+6. Strengthen reproducible releases, SBOMs and provenance, completed
 7. Expand integration documentation and external adoption evidence
 8. Establish the long-term maintenance and transparency process
 

@@ -20,6 +20,9 @@ jobs:
       - name: Verify shell syntax
         run: sh -n scripts/*.sh
 
+      - name: Verify reproducible release binary
+        run: sh scripts/reproducible-build.sh
+
       - name: Verify included binary checksum
         run: sha256sum --check CHECKSUMS.sha256
 
@@ -37,7 +40,7 @@ jobs:
       - name: Test included x86-64 binary
         run: sh scripts/test-prebuilt.sh
 
-      - name: Generate image identity and SPDX SBOM
+      - name: Generate image identity and SPDX and CycloneDX SBOMs
         run: sh scripts/generate-sbom.sh majax-kem-demo:1.0.0
 
       - name: Upload verification artifacts

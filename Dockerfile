@@ -1,5 +1,10 @@
 FROM rust:1.93-bookworm@sha256:7c4ae649a84014c467d79319bbf17ce2632ae8b8be123ac2fb2ea5be46823f31 AS engine-builder
 
+ARG SOURCE_DATE_EPOCH=0
+ENV CARGO_INCREMENTAL=0 \
+    SOURCE_DATE_EPOCH=${SOURCE_DATE_EPOCH} \
+    RUSTFLAGS="-C link-arg=-Wl,--build-id=none -C strip=symbols --remap-path-prefix=/src=."
+
 WORKDIR /src
 COPY engine/Cargo.toml engine/Cargo.lock ./
 COPY engine/src ./src

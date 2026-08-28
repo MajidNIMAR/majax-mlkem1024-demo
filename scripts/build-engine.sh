@@ -4,6 +4,14 @@ set -eu
 SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 PROJECT_DIR=$(CDPATH= cd -- "$SCRIPT_DIR/.." && pwd)
 PLATFORM=${1:-linux/amd64}
+SOURCE_DATE_EPOCH=${SOURCE_DATE_EPOCH:-0}
+
+case "$SOURCE_DATE_EPOCH" in
+  ''|*[!0-9]*)
+    echo "ERROR: SOURCE_DATE_EPOCH must be a non-negative integer." >&2
+    exit 1
+    ;;
+esac
 
 case "$PLATFORM" in
   linux/amd64)
@@ -33,6 +41,7 @@ mkdir -p "$OUTPUT_DIR"
 
 docker buildx build \
   --platform "$PLATFORM" \
+  --build-arg "SOURCE_DATE_EPOCH=$SOURCE_DATE_EPOCH" \
   --file Dockerfile \
   --target binary \
   --output "type=local,dest=$OUTPUT_DIR" \

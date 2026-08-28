@@ -21,24 +21,41 @@ mkdir -p "$OUTPUT_DIR"
 docker image inspect "$IMAGE" --format '{{.Id}}' > "$OUTPUT_DIR/image-id.txt"
 docker run --rm \
   -v /var/run/docker.sock:/var/run/docker.sock \
-  -v "$OUTPUT_DIR:/output" \
   "$SYFT_IMAGE" \
-  "$IMAGE" -o spdx-json=/output/majax-kem-demo.spdx.json
+  "$IMAGE" -o spdx-json \
+  > "$OUTPUT_DIR/majax-kem-demo.spdx.json"
+
+docker run --rm \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  "$SYFT_IMAGE" \
+  "$IMAGE" -o cyclonedx-json \
+  > "$OUTPUT_DIR/majax-kem-demo.cyclonedx.json"
 
 docker run --rm \
   -v "$PROJECT_DIR:/source:ro" \
-  -v "$OUTPUT_DIR:/output" \
   "$SYFT_IMAGE" \
   dir:/source \
   --source-name majax-kem-demo-source \
   --source-version 1.0.0 \
-  -o spdx-json=/output/majax-kem-demo-source.spdx.json
+  -o spdx-json \
+  > "$OUTPUT_DIR/majax-kem-demo-source.spdx.json"
+
+docker run --rm \
+  -v "$PROJECT_DIR:/source:ro" \
+  "$SYFT_IMAGE" \
+  dir:/source \
+  --source-name majax-kem-demo-source \
+  --source-version 1.0.0 \
+  -o cyclonedx-json \
+  > "$OUTPUT_DIR/majax-kem-demo-source.cyclonedx.json"
 
 if command -v sha256sum >/dev/null 2>&1; then
   sha256sum \
+    "$OUTPUT_DIR/majax-kem-demo.cyclonedx.json" \
     "$OUTPUT_DIR/majax-kem-demo.spdx.json" \
+    "$OUTPUT_DIR/majax-kem-demo-source.cyclonedx.json" \
     "$OUTPUT_DIR/majax-kem-demo-source.spdx.json" \
     > "$OUTPUT_DIR/SBOM-CHECKSUMS.sha256"
 fi
 
-echo "Image identity and image/source SPDX SBOMs written to artifacts/."
+echo "Image identity and image/source SPDX and CycloneDX SBOMs written to artifacts/."

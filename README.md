@@ -138,6 +138,20 @@ sh scripts/generate-sbom.sh
 The generated evidence is written below `artifacts/` and remains outside
 version control.
 
+## Verify release reproducibility
+
+Build the release binary twice in clean, digest-pinned environments and require
+the results to be byte-for-byte identical.
+
+```sh
+sh scripts/reproducible-build.sh
+```
+
+Tagged releases provide x86-64 and AArch64 binaries, SPDX and CycloneDX SBOMs,
+SHA-256 checksums, keyless Sigstore bundles and GitHub build provenance. The
+complete process and its verification boundary are documented in
+[`docs/development/step-06-reproducible-releases.md`](docs/development/step-06-reproducible-releases.md).
+
 ## Compare portable and native backends
 
 The development line can compile either the portable PQClean implementation or

@@ -109,3 +109,26 @@ Set `FUZZ_SECONDS` to extend each libFuzzer campaign.
 ```sh
 FUZZ_SECONDS=3600 sh scripts/run-assurance.sh
 ```
+
+## Release evidence
+
+Verify that two clean builds of the same revision produce the same x86-64
+binary.
+
+```sh
+sh scripts/reproducible-build.sh
+```
+
+Generate SPDX and CycloneDX SBOMs for both the source tree and the runtime
+image after running the source-build test.
+
+```sh
+sh scripts/generate-sbom.sh majax-kem-demo:1.0.0
+```
+
+After downloading a tagged release into a directory, verify its checksums and,
+when Cosign is installed, its keyless Sigstore bundles.
+
+```sh
+sh scripts/verify-release.sh release
+```

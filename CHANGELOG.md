@@ -4,6 +4,29 @@ All notable changes to the Majax ML-KEM development line are recorded here.
 
 The stable demonstrator history remains available on the `main` branch.
 
+## Unreleased
+
+### Step 6, reproducible releases and provenance
+
+- added byte-for-byte repeatability checks for independent release builds
+- added SPDX and CycloneDX SBOMs for the source tree and runtime image
+- added x86-64 and AArch64 release artifacts
+- added keyless Sigstore bundles for every published artifact
+- added GitHub build provenance attestations and consumer verification tooling
+
+The complete engineering note is available in
+[`docs/development/step-06-reproducible-releases.md`](docs/development/step-06-reproducible-releases.md).
+
+### Step 5, portable and native performance backends
+
+- exposed portable, x86-64 AVX2 and AArch64 NEON backend identities
+- added portable-only and native-dispatch build policies
+- added comparative KeyGen, Encaps and Decaps benchmarks
+- added x86-64 and AArch64 performance evidence in CI
+
+The complete engineering note is available in
+[`docs/development/step-05-performance-backends.md`](docs/development/step-05-performance-backends.md).
+
 ### Step 4, fuzzing and higher-assurance evidence
 
 - added three bounded libFuzzer targets for the complete typed API
@@ -15,8 +38,6 @@ The stable demonstrator history remains available on the `main` branch.
 
 The complete engineering note is available in
 [`docs/development/step-04-fuzzing-and-higher-assurance.md`](docs/development/step-04-fuzzing-and-higher-assurance.md).
-
-## Unreleased
 
 ### Step 3, deterministic conformance and negative tests
 
