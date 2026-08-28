@@ -138,6 +138,20 @@ sh scripts/generate-sbom.sh
 The generated evidence is written below `artifacts/` and remains outside
 version control.
 
+## Compare portable and native backends
+
+The development line can compile either the portable PQClean implementation or
+native AVX2 and AArch64/NEON backends. Run both policies on the same host and
+produce raw and rendered performance evidence with one command.
+
+```sh
+sh scripts/run-benchmarks.sh
+```
+
+The report measures KeyGen, Encaps and Decaps for ML-KEM-512, ML-KEM-768 and
+ML-KEM-1024. Backend selection and benchmark interpretation are documented in
+[`docs/development/step-05-performance-backends.md`](docs/development/step-05-performance-backends.md).
+
 ## Security boundary
 
 This repository contains no production key, token, credential, user record,

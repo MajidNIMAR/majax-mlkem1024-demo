@@ -28,6 +28,9 @@ public operations.
 - libFuzzer targets exercise round trips, malformed objects and domain separation
 - Valgrind checks the dedicated assurance driver for memory errors
 - DudeCT compares decapsulation timing distributions across secret-key classes
+- portable builds exclude architecture-specific code through a feature boundary
+- native builds dispatch to AVX2 or AArch64/NEON when the current CPU supports it
+- comparative KeyGen, Encaps and Decaps measurements run on x86-64 and AArch64
 
 ## Ordered priorities
 
@@ -35,7 +38,7 @@ public operations.
 2. Add all three parameter sets through one interface, completed
 3. Expand deterministic, negative and conformance testing, completed
 4. Add fuzzing, constant-time analysis and higher-assurance evidence, completed
-5. Introduce portable and architecture-specific performance backends
+5. Introduce portable and architecture-specific performance backends, completed
 6. Strengthen reproducible releases, SBOMs and provenance
 7. Expand integration documentation and external adoption evidence
 8. Establish the long-term maintenance and transparency process

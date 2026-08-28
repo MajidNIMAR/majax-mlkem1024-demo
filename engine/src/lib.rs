@@ -88,6 +88,45 @@ impl Algorithm {
     }
 }
 
+/// Cryptographic implementation selected by this build on the current CPU.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum Backend {
+    /// Portable PQClean C implementation.
+    Portable,
+    /// PQClean x86-64 implementation using AVX2 instructions.
+    Avx2,
+    /// PQClean AArch64 implementation using NEON instructions.
+    Neon,
+}
+
+impl Backend {
+    pub const fn identifier(self) -> &'static str {
+        match self {
+            Self::Portable => "portable-clean",
+            Self::Avx2 => "x86_64-avx2",
+            Self::Neon => "aarch64-neon",
+        }
+    }
+}
+
+/// Reports the backend that the upstream dispatcher will use on this CPU.
+///
+/// Builds made without the `native` feature always report and use the portable
+/// implementation. Native builds retain runtime AVX2 detection on x86-64.
+pub fn active_backend() -> Backend {
+    #[cfg(all(feature = "native", target_arch = "x86_64"))]
+    if std::is_x86_feature_detected!("avx2") {
+        return Backend::Avx2;
+    }
+
+    #[cfg(all(feature = "native", target_arch = "aarch64"))]
+    {
+        return Backend::Neon;
+    }
+
+    Backend::Portable
+}
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Error {
     InvalidPublicKey,
@@ -400,6 +439,18 @@ mod tests {
             );
         }
         assert_eq!(Algorithm::from_identifier("ML-KEM-999"), None);
+    }
+
+    #[test]
+    fn backend_identifier_matches_the_compiled_dispatch_policy() {
+        let backend = active_backend();
+        assert!(matches!(
+            backend,
+            Backend::Portable | Backend::Avx2 | Backend::Neon
+        ));
+
+        #[cfg(not(feature = "native"))]
+        assert_eq!(backend, Backend::Portable);
     }
 
     #[test]

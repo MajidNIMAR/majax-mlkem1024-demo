@@ -67,3 +67,31 @@ jobs:
           name: majax-mlkem-assurance
           path: artifacts/assurance/
           if-no-files-found: warn
+
+  performance:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: ubuntu-24.04
+            platform: linux-x86_64
+          - runner: ubuntu-24.04-arm
+            platform: linux-aarch64
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 30
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Compare portable and native backends
+        env:
+          BENCH_ITERATIONS: "250"
+        run: sh scripts/run-benchmarks.sh
+
+      - name: Upload performance evidence
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: majax-mlkem-performance-${{ matrix.platform }}
+          path: artifacts/performance/
+          if-no-files-found: error
