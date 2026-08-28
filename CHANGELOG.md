@@ -6,6 +6,16 @@ The stable demonstrator history remains available on the `main` branch.
 
 ## Unreleased
 
+### Step 7, integration contract and adoption evidence
+
+- added a standalone Rust consumer for all three ML-KEM parameter sets
+- added revision pinning, secret-lifetime and protocol-boundary guidance
+- added generated public API documentation and downstream checks to CI
+- added a public evidence policy for external adoption claims
+
+The complete engineering note is available in
+[`docs/development/step-07-integration-and-adoption.md`](docs/development/step-07-integration-and-adoption.md).
+
 ### Step 6, reproducible releases and provenance
 
 - added byte-for-byte repeatability checks for independent release builds

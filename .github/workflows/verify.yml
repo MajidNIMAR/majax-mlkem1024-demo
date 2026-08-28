@@ -9,6 +9,24 @@ permissions:
   contents: read
 
 jobs:
+  integration:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Build the downstream consumer and public documentation
+        run: sh scripts/test-integration.sh
+
+      - name: Upload integration evidence
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: majax-mlkem-integration
+          path: artifacts/integration/
+          if-no-files-found: error
+
   verify:
     runs-on: ubuntu-24.04
     timeout-minutes: 30

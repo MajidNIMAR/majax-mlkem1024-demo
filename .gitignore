@@ -1,5 +1,6 @@
 # Build outputs only. The audited Linux x86-64 binary is versioned deliberately.
 engine/target/
+examples/rust-consumer/target/
 assurance/target/
 fuzz/target/
 fuzz/artifacts/

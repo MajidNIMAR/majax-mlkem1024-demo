@@ -34,6 +34,9 @@ public operations.
 - independent release builds must produce byte-for-byte identical binaries
 - source and image SBOMs are emitted in SPDX and CycloneDX formats
 - tagged artifacts receive keyless Sigstore signatures and GitHub provenance
+- a separate Cargo consumer verifies the public integration contract
+- public API documentation is generated and retained as CI evidence
+- external adoption claims follow an evidence-based public register
 
 ## Ordered priorities
 
@@ -43,7 +46,7 @@ public operations.
 4. Add fuzzing, constant-time analysis and higher-assurance evidence, completed
 5. Introduce portable and architecture-specific performance backends, completed
 6. Strengthen reproducible releases, SBOMs and provenance, completed
-7. Expand integration documentation and external adoption evidence
+7. Expand integration documentation and external adoption evidence, integration support completed; independent adoption pending
 8. Establish the long-term maintenance and transparency process
 
 No production credential, endpoint, protocol secret or operational Majax

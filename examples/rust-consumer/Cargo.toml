@@ -1,0 +1,8 @@
+[package]
+name = "majax-mlkem-integration-example"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+majax-mlkem = { path = "../../engine", default-features = false }

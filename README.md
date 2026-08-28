@@ -166,6 +166,22 @@ The report measures KeyGen, Encaps and Decaps for ML-KEM-512, ML-KEM-768 and
 ML-KEM-1024. Backend selection and benchmark interpretation are documented in
 [`docs/development/step-05-performance-backends.md`](docs/development/step-05-performance-backends.md).
 
+## Integrate the Rust library
+
+The development line exposes one Rust API for ML-KEM-512, ML-KEM-768 and
+ML-KEM-1024. A separate consumer package exercises that public boundary and
+generates rustdoc in the same pinned environment used by continuous
+integration.
+
+```sh
+sh scripts/test-integration.sh
+```
+
+Dependency pinning, feature selection, secret lifetime and protocol duties are
+covered in [`INTEGRATION.md`](INTEGRATION.md). Independently verifiable adoption
+is tracked separately in [`ADOPTERS.md`](ADOPTERS.md). No external adopter is
+claimed without an identifiable project and immutable integration evidence.
+
 ## Security boundary
 
 This repository contains no production key, token, credential, user record,

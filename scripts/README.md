@@ -132,3 +132,15 @@ when Cosign is installed, its keyless Sigstore bundles.
 ```sh
 sh scripts/verify-release.sh release
 ```
+
+## Downstream integration
+
+Build the standalone Rust consumer against the public library API and generate
+the corresponding rustdoc.
+
+```sh
+sh scripts/test-integration.sh
+```
+
+The command covers ML-KEM-512, ML-KEM-768 and ML-KEM-1024. Its evidence is
+written below `artifacts/integration/`.

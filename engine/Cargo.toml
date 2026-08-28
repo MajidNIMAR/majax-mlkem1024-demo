@@ -2,7 +2,7 @@
 name = "majax-mlkem"
 version = "0.1.0"
 edition = "2021"
-description = "Development library and JSON CLI for ML-KEM-1024"
+description = "Development library and JSON CLI for the FIPS 203 ML-KEM parameter sets"
 license = "Apache-2.0"
 rust-version = "1.93"
 publish = false
