@@ -3,7 +3,8 @@ use std::io::{self, Read};
 
 use base64::{engine::general_purpose::STANDARD as BASE64, Engine as _};
 use majax_mlkem::{
-    decapsulate as kem_decapsulate, encapsulate as kem_encapsulate, generate_keypair, ALGORITHM,
+    decapsulate_for as kem_decapsulate, encapsulate_for as kem_encapsulate, generate_keypair_for,
+    Algorithm,
 };
 use serde::{Deserialize, Serialize};
 
@@ -71,14 +72,13 @@ fn read_stdin() -> Result<String, String> {
     Ok(input)
 }
 
-fn validate_common(input: &CommonInput) -> Result<(), String> {
-    if let Some(algo) = input.algo.as_deref() {
-        if algo != ALGORITHM {
-            return Err(format!("unsupported algorithm: {algo}"));
-        }
-    }
+fn validate_common(input: &CommonInput) -> Result<Algorithm, String> {
     let _ = input.device_id.as_deref();
-    Ok(())
+    match input.algo.as_deref() {
+        Some(identifier) => Algorithm::from_identifier(identifier)
+            .ok_or_else(|| format!("unsupported algorithm: {identifier}")),
+        None => Ok(Algorithm::default()),
+    }
 }
 
 fn decode(value: &str, label: &str) -> Result<Vec<u8>, String> {
@@ -90,11 +90,11 @@ fn decode(value: &str, label: &str) -> Result<Vec<u8>, String> {
 fn generate(input: &str) -> Result<GenOutput, String> {
     let common: CommonInput = serde_json::from_str(input)
         .map_err(|error| format!("invalid generation input: {error}"))?;
-    validate_common(&common)?;
-    let keys = generate_keypair();
+    let algorithm = validate_common(&common)?;
+    let keys = generate_keypair_for(algorithm);
     Ok(GenOutput {
         ok: true,
-        algo: ALGORITHM,
+        algo: algorithm.identifier(),
         public_key: BASE64.encode(keys.public_key),
         private_key: BASE64.encode(keys.secret_key.expose()),
     })
@@ -103,12 +103,13 @@ fn generate(input: &str) -> Result<GenOutput, String> {
 fn encapsulate(input: &str) -> Result<EncOutput, String> {
     let request: EncInput = serde_json::from_str(input)
         .map_err(|error| format!("invalid encapsulation input: {error}"))?;
-    validate_common(&request.common)?;
+    let algorithm = validate_common(&request.common)?;
     let public_key_bytes = decode(&request.public_key, "publicKey")?;
-    let result = kem_encapsulate(&public_key_bytes).map_err(|error| error.to_string())?;
+    let result =
+        kem_encapsulate(algorithm, &public_key_bytes).map_err(|error| error.to_string())?;
     Ok(EncOutput {
         ok: true,
-        algo: ALGORITHM,
+        algo: algorithm.identifier(),
         ciphertext_b64: BASE64.encode(result.ciphertext),
         shared_secret_b64: BASE64.encode(result.shared_secret.expose()),
     })
@@ -117,14 +118,14 @@ fn encapsulate(input: &str) -> Result<EncOutput, String> {
 fn decapsulate(input: &str) -> Result<DecOutput, String> {
     let request: DecInput = serde_json::from_str(input)
         .map_err(|error| format!("invalid decapsulation input: {error}"))?;
-    validate_common(&request.common)?;
+    let algorithm = validate_common(&request.common)?;
     let private_key_bytes = decode(&request.private_key, "privateKey")?;
     let ciphertext_bytes = decode(&request.ciphertext_b64, "ciphertext_b64")?;
-    let shared_secret = kem_decapsulate(&ciphertext_bytes, &private_key_bytes)
+    let shared_secret = kem_decapsulate(algorithm, &ciphertext_bytes, &private_key_bytes)
         .map_err(|error| error.to_string())?;
     Ok(DecOutput {
         ok: true,
-        algo: ALGORITHM,
+        algo: algorithm.identifier(),
         shared_secret_b64: BASE64.encode(shared_secret.expose()),
     })
 }
@@ -152,5 +153,53 @@ fn main() {
             eprintln!("{error}");
             std::process::exit(1);
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn json_contract_supports_every_parameter_set() {
+        for algorithm in Algorithm::ALL {
+            let generated = generate(&format!(r#"{{"algo":"{}"}}"#, algorithm.identifier()))
+                .expect("generation succeeds");
+            let encapsulated = encapsulate(&format!(
+                r#"{{"algo":"{}","publicKey":"{}"}}"#,
+                algorithm.identifier(),
+                generated.public_key
+            ))
+            .expect("encapsulation succeeds");
+            let decapsulated = decapsulate(&format!(
+                r#"{{"algo":"{}","privateKey":"{}","ciphertext_b64":"{}"}}"#,
+                algorithm.identifier(),
+                generated.private_key,
+                encapsulated.ciphertext_b64
+            ))
+            .expect("decapsulation succeeds");
+
+            assert_eq!(generated.algo, algorithm.identifier());
+            assert_eq!(encapsulated.algo, algorithm.identifier());
+            assert_eq!(decapsulated.algo, algorithm.identifier());
+            assert_eq!(
+                encapsulated.shared_secret_b64,
+                decapsulated.shared_secret_b64
+            );
+        }
+    }
+
+    #[test]
+    fn json_contract_defaults_to_ml_kem_1024() {
+        let generated = generate("{}").expect("generation succeeds");
+        assert_eq!(generated.algo, Algorithm::MlKem1024.identifier());
+    }
+
+    #[test]
+    fn json_contract_rejects_unknown_parameter_sets() {
+        let error = generate(r#"{"algo":"ML-KEM-999"}"#)
+            .err()
+            .expect("algorithm is rejected");
+        assert_eq!(error, "unsupported algorithm: ML-KEM-999");
     }
 }

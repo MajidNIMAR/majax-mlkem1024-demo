@@ -8,25 +8,30 @@ Development starts from the exact ML-KEM-1024 behavior verified by the stable
 demonstrator. Changes must preserve that behavior through automated
 non-regression tests before extending the supported surface.
 
-## Current milestone
+## Completed milestones
 
-The cryptographic core is now exposed as a typed Rust library. The JSON command
-line interface is an adapter over the same public operations.
+The cryptographic core is exposed as a typed Rust library. One algorithm
+selector provides the same operations for ML-KEM-512, ML-KEM-768 and
+ML-KEM-1024. The JSON command-line interface remains an adapter over the same
+public operations.
 
-- `generate_keypair()` creates a fresh ML-KEM-1024 key pair
-- `encapsulate()` validates a public key and returns a ciphertext and secret
-- `decapsulate()` validates its inputs and applies standardized decapsulation
+- `generate_keypair_for()` creates a fresh key pair for a selected level
+- `encapsulate_for()` validates a public key and returns a ciphertext and secret
+- `decapsulate_for()` validates its inputs and applies decapsulation
+- legacy operations continue to select ML-KEM-1024
 - secret byte containers are wiped when dropped
-- malformed object lengths and altered ciphertext behavior are tested
+- malformed objects, altered ciphertexts and cross-level keys are tested
 
 ## Ordered priorities
 
-1. Stabilize the library contract and publish end-to-end API examples
-2. Add ML-KEM-512 and ML-KEM-768 through the same typed interface
-3. Expand negative, deterministic and conformance testing
-4. Add continuous fuzzing and automated constant-time analysis
+1. Extract and stabilize the typed ML-KEM-1024 library API, completed
+2. Add all three parameter sets through one interface, completed
+3. Expand deterministic, negative and conformance testing
+4. Add fuzzing, constant-time analysis and higher-assurance evidence
 5. Introduce portable and architecture-specific performance backends
-6. Strengthen reproducibility, release provenance and external review evidence
+6. Strengthen reproducible releases, SBOMs and provenance
+7. Expand integration documentation and external adoption evidence
+8. Establish the long-term maintenance and transparency process
 
 No production credential, endpoint, protocol secret or operational Majax
 configuration belongs in this branch.
