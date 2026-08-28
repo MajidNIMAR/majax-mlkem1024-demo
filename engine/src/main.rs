@@ -2,14 +2,10 @@ use std::env;
 use std::io::{self, Read};
 
 use base64::{engine::general_purpose::STANDARD as BASE64, Engine as _};
-use pqcrypto_mlkem::mlkem1024;
-use pqcrypto_traits::kem::{
-    Ciphertext as CiphertextTrait, PublicKey as PublicKeyTrait, SecretKey as SecretKeyTrait,
-    SharedSecret as SharedSecretTrait,
+use majax_mlkem::{
+    decapsulate as kem_decapsulate, encapsulate as kem_encapsulate, generate_keypair, ALGORITHM,
 };
 use serde::{Deserialize, Serialize};
-
-const ALGORITHM: &str = "ML-KEM-1024";
 
 #[derive(Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -95,12 +91,12 @@ fn generate(input: &str) -> Result<GenOutput, String> {
     let common: CommonInput = serde_json::from_str(input)
         .map_err(|error| format!("invalid generation input: {error}"))?;
     validate_common(&common)?;
-    let (public_key, private_key) = mlkem1024::keypair();
+    let keys = generate_keypair();
     Ok(GenOutput {
         ok: true,
         algo: ALGORITHM,
-        public_key: BASE64.encode(public_key.as_bytes()),
-        private_key: BASE64.encode(private_key.as_bytes()),
+        public_key: BASE64.encode(keys.public_key),
+        private_key: BASE64.encode(keys.secret_key.expose()),
     })
 }
 
@@ -109,14 +105,12 @@ fn encapsulate(input: &str) -> Result<EncOutput, String> {
         .map_err(|error| format!("invalid encapsulation input: {error}"))?;
     validate_common(&request.common)?;
     let public_key_bytes = decode(&request.public_key, "publicKey")?;
-    let public_key = mlkem1024::PublicKey::from_bytes(&public_key_bytes)
-        .map_err(|error| format!("invalid ML-KEM-1024 public key: {error:?}"))?;
-    let (shared_secret, ciphertext) = mlkem1024::encapsulate(&public_key);
+    let result = kem_encapsulate(&public_key_bytes).map_err(|error| error.to_string())?;
     Ok(EncOutput {
         ok: true,
         algo: ALGORITHM,
-        ciphertext_b64: BASE64.encode(ciphertext.as_bytes()),
-        shared_secret_b64: BASE64.encode(shared_secret.as_bytes()),
+        ciphertext_b64: BASE64.encode(result.ciphertext),
+        shared_secret_b64: BASE64.encode(result.shared_secret.expose()),
     })
 }
 
@@ -126,15 +120,12 @@ fn decapsulate(input: &str) -> Result<DecOutput, String> {
     validate_common(&request.common)?;
     let private_key_bytes = decode(&request.private_key, "privateKey")?;
     let ciphertext_bytes = decode(&request.ciphertext_b64, "ciphertext_b64")?;
-    let private_key = mlkem1024::SecretKey::from_bytes(&private_key_bytes)
-        .map_err(|error| format!("invalid ML-KEM-1024 private key: {error:?}"))?;
-    let ciphertext = mlkem1024::Ciphertext::from_bytes(&ciphertext_bytes)
-        .map_err(|error| format!("invalid ML-KEM-1024 ciphertext: {error:?}"))?;
-    let shared_secret = mlkem1024::decapsulate(&ciphertext, &private_key);
+    let shared_secret = kem_decapsulate(&ciphertext_bytes, &private_key_bytes)
+        .map_err(|error| error.to_string())?;
     Ok(DecOutput {
         ok: true,
         algo: ALGORITHM,
-        shared_secret_b64: BASE64.encode(shared_secret.as_bytes()),
+        shared_secret_b64: BASE64.encode(shared_secret.expose()),
     })
 }
 

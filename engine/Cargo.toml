@@ -1,11 +1,19 @@
 [package]
-name = "mlkem-cli"
-version = "1.0.0"
+name = "majax-mlkem"
+version = "0.1.0"
 edition = "2021"
-description = "Single-engine ML-KEM-1024 JSON command-line demonstrator"
+description = "Development library and JSON CLI for ML-KEM-1024"
 license = "Apache-2.0"
 rust-version = "1.93"
 publish = false
+
+[lib]
+name = "majax_mlkem"
+path = "src/lib.rs"
+
+[[bin]]
+name = "mlkem-cli"
+path = "src/main.rs"
 
 [dependencies]
 base64 = "=0.21.7"
