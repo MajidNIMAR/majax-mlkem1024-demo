@@ -4,6 +4,18 @@ All notable changes to the Majax ML-KEM development line are recorded here.
 
 The stable demonstrator history remains available on the `main` branch.
 
+### Step 4, fuzzing and higher-assurance evidence
+
+- added three bounded libFuzzer targets for the complete typed API
+- added malformed-object and cross-domain fuzz coverage
+- added a dedicated Valgrind memory-safety driver
+- added DudeCT timing distributions for decapsulation at every parameter set
+- isolated the assurance toolchain in a digest-pinned Docker image
+- added short CI campaigns and longer operator-controlled campaigns
+
+The complete engineering note is available in
+[`docs/development/step-04-fuzzing-and-higher-assurance.md`](docs/development/step-04-fuzzing-and-higher-assurance.md).
+
 ## Unreleased
 
 ### Step 3, deterministic conformance and negative tests

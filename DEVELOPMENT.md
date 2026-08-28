@@ -25,13 +25,16 @@ public operations.
 - deterministic KeyGen and Encaps test interfaces are feature gated
 - pinned NIST ACVP sample outputs are compared byte for byte
 - boundary-length and cross-parameter negative matrices run in CI
+- libFuzzer targets exercise round trips, malformed objects and domain separation
+- Valgrind checks the dedicated assurance driver for memory errors
+- DudeCT compares decapsulation timing distributions across secret-key classes
 
 ## Ordered priorities
 
 1. Extract and stabilize the typed ML-KEM-1024 library API, completed
 2. Add all three parameter sets through one interface, completed
 3. Expand deterministic, negative and conformance testing, completed
-4. Add fuzzing, constant-time analysis and higher-assurance evidence
+4. Add fuzzing, constant-time analysis and higher-assurance evidence, completed
 5. Introduce portable and architecture-specific performance backends
 6. Strengthen reproducible releases, SBOMs and provenance
 7. Expand integration documentation and external adoption evidence

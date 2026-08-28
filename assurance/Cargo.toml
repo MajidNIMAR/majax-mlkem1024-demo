@@ -1,0 +1,18 @@
+[package]
+name = "majax-mlkem-assurance"
+version = "0.1.0"
+edition = "2021"
+license = "Apache-2.0"
+publish = false
+
+[dependencies]
+dudect-bencher = "=0.7.0"
+majax-mlkem = { path = "../engine", features = ["deterministic-testing"] }
+
+[[bin]]
+name = "memory-safety"
+path = "src/bin/memory-safety.rs"
+
+[[bin]]
+name = "timing-decapsulation"
+path = "src/bin/timing-decapsulation.rs"

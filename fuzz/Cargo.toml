@@ -1,0 +1,33 @@
+[package]
+name = "majax-mlkem-fuzz"
+version = "0.0.0"
+edition = "2021"
+publish = false
+
+[package.metadata]
+cargo-fuzz = true
+
+[dependencies]
+libfuzzer-sys = "=0.4.13"
+majax-mlkem = { path = "../engine", features = ["deterministic-testing"] }
+
+[[bin]]
+name = "api-roundtrip"
+path = "fuzz_targets/api-roundtrip.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "malformed-objects"
+path = "fuzz_targets/malformed-objects.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "cross-domain"
+path = "fuzz_targets/cross-domain.rs"
+test = false
+doc = false
+bench = false
