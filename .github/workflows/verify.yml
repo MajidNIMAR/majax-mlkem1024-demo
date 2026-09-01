@@ -21,7 +21,7 @@ jobs:
         run: sh scripts/test-integration.sh
 
       - name: Upload integration evidence
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: majax-mlkem-integration
           path: artifacts/integration/
@@ -62,7 +62,7 @@ jobs:
         run: sh scripts/generate-sbom.sh majax-kem-demo:1.0.0
 
       - name: Upload verification artifacts
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: majax-kem-demo-verification
           path: artifacts/
@@ -83,7 +83,7 @@ jobs:
 
       - name: Upload assurance evidence
         if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: majax-mlkem-assurance
           path: artifacts/assurance/
@@ -111,7 +111,7 @@ jobs:
         run: sh scripts/run-benchmarks.sh
 
       - name: Upload performance evidence
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: majax-mlkem-performance-${{ matrix.platform }}
           path: artifacts/performance/
