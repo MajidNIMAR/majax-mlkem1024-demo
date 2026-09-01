@@ -1,4 +1,4 @@
-FROM rust:1.93-bookworm@sha256:7c4ae649a84014c467d79319bbf17ce2632ae8b8be123ac2fb2ea5be46823f31 AS engine-builder
+FROM rust:1.98-bookworm@sha256:82150a52ec202c1b14d7817e14516c392bb7f5cfebd88f1ed531cb37ebd39922 AS engine-builder
 
 ARG SOURCE_DATE_EPOCH=0
 ENV CARGO_INCREMENTAL=0 \
