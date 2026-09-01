@@ -13,7 +13,7 @@ RUN cargo build --release --locked
 FROM scratch AS binary
 COPY --from=engine-builder /src/target/release/mlkem-cli /mlkem-cli
 
-FROM node:20-bookworm-slim@sha256:2cf067cfed83d5ea958367df9f966191a942351a2df77d6f0193e162b5febfc0 AS runtime
+FROM node:26-bookworm-slim@sha256:367679cf9792759492a486e4aa4b421764d71a9546a6dae8aab81a99eb797b3e AS runtime
 
 ENV NODE_ENV=production \
     PORT=8080 \
