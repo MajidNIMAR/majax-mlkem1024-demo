@@ -4,5 +4,5 @@ contact_links:
     url: https://github.com/MajidNIMAR/majax-mlkem1024-demo/security/advisories/new
     about: Report a suspected vulnerability without public disclosure.
   - name: Support policy
-    url: https://github.com/MajidNIMAR/majax-mlkem1024-demo/blob/development/SUPPORT.md
+    url: https://github.com/MajidNIMAR/majax-mlkem1024-demo/blob/main/SUPPORT.md
     about: Check the supported public scope before opening an issue.

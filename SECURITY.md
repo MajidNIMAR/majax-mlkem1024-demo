@@ -14,8 +14,8 @@ Majax or of any system using this demonstrator.
 ## Supported versions
 
 Security corrections are applied to the latest stable release and the current
-`development` revision. Older revisions are retained for traceability but are
-not supported. The complete branch and release policy appears in
+`main` revision. Older revisions are retained for traceability but are not
+supported. The complete branch and release policy appears in
 `MAINTENANCE.md`.
 
 ## Reporting a vulnerability

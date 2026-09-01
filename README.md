@@ -31,6 +31,25 @@ The result is deliberately modest in scope and serious in execution. It is a
 working cryptographic demonstrator, not a mock-up and not a marketing
 animation.
 
+## What is available on main
+
+The original one-engine ML-KEM-1024 demonstration remains unchanged at the
+HTTP boundary. The repository now also contains the eight completed engineering
+milestones on its default branch.
+
+1. A typed library API for KeyGen, Encaps and Decaps
+2. One interface for ML-KEM-512, ML-KEM-768 and ML-KEM-1024
+3. Deterministic conformance, rejection and negative tests
+4. Fuzzing, memory checks and automated timing analysis
+5. Portable, AVX2 and AArch64/NEON performance backends
+6. Reproducible releases, SBOMs, signatures and provenance
+7. A tested downstream integration contract and adoption evidence policy
+8. Public governance, maintenance, disclosure and roadmap documents
+
+Each milestone is preserved as a separate commit and documented in
+[`DEVELOPMENT.md`](DEVELOPMENT.md). The default Docker demonstration still
+activates exactly one ML-KEM-1024 engine per run.
+
 ## What one execution demonstrates
 
 Every run creates fresh material and performs the complete path below.
@@ -154,7 +173,7 @@ complete process and its verification boundary are documented in
 
 ## Compare portable and native backends
 
-The development line can compile either the portable PQClean implementation or
+The main branch can compile either the portable PQClean implementation or
 native AVX2 and AArch64/NEON backends. Run both policies on the same host and
 produce raw and rendered performance evidence with one command.
 
@@ -168,7 +187,7 @@ ML-KEM-1024. Backend selection and benchmark interpretation are documented in
 
 ## Integrate the Rust library
 
-The development line exposes one Rust API for ML-KEM-512, ML-KEM-768 and
+The main branch exposes one Rust API for ML-KEM-512, ML-KEM-768 and
 ML-KEM-1024. A separate consumer package exercises that public boundary and
 generates rustdoc in the same pinned environment used by continuous
 integration.

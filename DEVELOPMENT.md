@@ -1,12 +1,12 @@
-# Development line
+# Engineering record
 
-This branch is the development line for the public Majax ML-KEM work. The
-stable demonstrator remains available on `main` and retains its narrow,
-reproducible scope.
+The eight public development milestones are integrated into `main`. Their
+individual commits and engineering notes remain available so reviewers can
+inspect each stage independently.
 
-Development starts from the exact ML-KEM-1024 behavior verified by the stable
-demonstrator. Changes must preserve that behavior through automated
-non-regression tests before extending the supported surface.
+The work started from the exact ML-KEM-1024 behavior verified by the original
+demonstrator. Every extension preserves that behavior through automated
+non-regression tests while expanding the supported surface.
 
 ## Completed milestones
 
@@ -52,4 +52,4 @@ public operations.
 8. Establish the long-term maintenance and transparency process, completed
 
 No production credential, endpoint, protocol secret or operational Majax
-configuration belongs in this branch.
+configuration belongs in this repository.

@@ -95,9 +95,9 @@ sh scripts/build-engine.sh linux/arm64
 On an x86-64 Docker host, the ARM64 command requires QEMU support in the active
 Buildx builder. A native ARM64 Docker host can build it directly.
 
-## Development assurance suite
+## Assurance suite
 
-The development branch includes isolated fuzzing, memory and timing analysis.
+The main branch includes isolated fuzzing, memory and timing analysis.
 Run the complete stage 4 suite as shown below.
 
 ```sh

@@ -5,12 +5,12 @@ targets below express project practice and are not contractual service levels.
 
 ## Branches
 
-`main` preserves the stable single-engine demonstrator. `development` contains
-the expanded library and the ordered engineering work. Changes reach `main`
-only through a deliberate stabilization decision. Development work must never
-silently rewrite stable history.
+`main` is the canonical public branch. It contains the original single-engine
+demonstrator, the expanded library and the complete ordered engineering record.
+Future work reaches `main` through reviewed commits or pull requests and must
+never silently rewrite published history.
 
-Only the latest stable release and the current development revision receive new
+Only the latest stable release and the current `main` revision receive new
 corrections. Historical revisions remain available for traceability.
 
 ## Versioning

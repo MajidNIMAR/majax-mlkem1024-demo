@@ -1,10 +1,14 @@
 # Changelog
 
-All notable changes to the Majax ML-KEM development line are recorded here.
-
-The stable demonstrator history remains available on the `main` branch.
+All notable changes to the public Majax ML-KEM project are recorded here.
 
 ## Unreleased
+
+### Main branch consolidation
+
+- promoted the eight completed engineering milestones to `main`
+- retained every milestone commit and its accompanying engineering note
+- made `main` the canonical branch for testing, integration and future work
 
 ### Step 8, maintenance and transparency
 

@@ -1,6 +1,6 @@
 # Integrating the Rust library
 
-The development branch exposes ML-KEM-512, ML-KEM-768 and ML-KEM-1024 through
+The main branch exposes ML-KEM-512, ML-KEM-768 and ML-KEM-1024 through
 one Rust API. The library is designed for explicit algorithm selection and
 short-lived secret handling. It is not published to crates.io at this stage.
 
